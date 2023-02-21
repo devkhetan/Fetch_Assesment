@@ -1,4 +1,6 @@
- -- Which user spent the most money in the month of August?
+-- I have used MySQL
+
+-- Which user spent the most money in the month of August?
  
  SELECT USER_ID, TOTAL_SPENT
 FROM users
