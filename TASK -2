@@ -1,3 +1,5 @@
+ -- Which user spent the most money in the month of August?
+ 
  SELECT USER_ID, TOTAL_SPENT
 FROM users
 JOIN receipts
@@ -5,3 +7,58 @@ JOIN receipts
 WHERE MONTH(PURCHASE_DATE) = 8   -- FOR THE MONTH OF AUGUST
 ORDER BY TOTAL_SPENT DESC        -- SORT PRICE DESCENDING
 LIMIT 1;			 -- THE USER SPENT MOST IN AUGUST 
+
+
+-- How many users scanned in each month?
+SELECT 
+    MONTH(DATE_SCANNED) AS month,
+    COUNT(DISTINCT USER_ID) AS unique_users
+FROM 
+    receipts
+GROUP BY 
+    MONTH(DATE_SCANNED);
+    
+  
+-- What is the name of the most expensive item purchased?
+
+SELECT 
+    receipt_items.BRAND_CODE AS item_name,
+    MAX(TOTAL_FINAL_PRICE) AS max_price
+FROM 
+    receipt_items
+    JOIN receipts 
+    ON receipt_items.QUANTITY_PURCHASED = receipts.PURCHASED_ITEM_COUNT
+GROUP BY 
+   receipt_items.BRAND_CODE
+ORDER BY 
+    max_price DESC
+LIMIT 1;
+
+-- Which brand saw the most dollars spent in the month of June?
+
+SELECT 
+    receipt_items.BRAND_CODE AS brand_name,
+    SUM(TOTAL_FINAL_PRICE) AS total_spent
+FROM 
+    receipt_items
+     JOIN receipts ON receipt_itemS.QUANTITY_PURCHASED = receipts.PURCHASED_ITEM_COUNT
+WHERE 
+    MONTH(PURCHASE_DATE) = 6
+GROUP BY 
+    receipt_items.BRAND_CODE
+ORDER BY 
+    total_spent DESC
+LIMIT 1;
+
+
+-- What user bought the most expensive item?
+
+SELECT 
+    users.ID AS user_name,
+    receipt_items.BRAND_CODE AS item_name,
+    TOTAL_SPENT
+FROM 
+    receipts
+    JOIN users ON receipts.USER_ID = users.ID
+    JOIN receipt_items ON receipts.PURCHASED_ITEM_COUNT = receipt_items.QUANTITY_PURCHASED;
+
